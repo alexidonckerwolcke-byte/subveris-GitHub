@@ -11,7 +11,8 @@ import {
   ChevronDown,
 } from "lucide-react";
 import type { AIRecommendation } from "@shared/schema";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, convertAndFormatCurrency } from "@/lib/utils";
+import { useSubscription } from "@/lib/subscription-context";
 
 interface AIRecommendationsProps {
   recommendations: AIRecommendation[] | undefined;
@@ -26,6 +27,8 @@ export function AIRecommendations({
   onRefresh,
   isRefreshing,
 }: AIRecommendationsProps) {
+  const { currency } = useSubscription();
+
   if (isLoading) {
     return (
       <Card>
@@ -115,7 +118,7 @@ export function AIRecommendations({
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="text-sm font-semibold text-chart-2">
-                      Save {formatCurrency(rec.savings)}
+                      Save {convertAndFormatCurrency(rec.savings, currency)}
                     </span>
                     <span className="text-xs text-muted-foreground">/mo</span>
                   </div>
@@ -128,14 +131,14 @@ export function AIRecommendations({
                     <div>
                       <span className="text-muted-foreground">Current: </span>
                       <span className="font-medium line-through text-chart-5">
-                        {formatCurrency(rec.currentCost)}
+                        {convertAndFormatCurrency(rec.currentCost, currency)}
                       </span>
                     </div>
                     <ArrowRight className="h-4 w-4 text-muted-foreground" />
                     <div>
                       <span className="text-muted-foreground">Suggested: </span>
                       <span className="font-medium text-chart-2">
-                        {formatCurrency(rec.suggestedCost)}
+                        {convertAndFormatCurrency(rec.suggestedCost, currency)}
                       </span>
                     </div>
                   </div>

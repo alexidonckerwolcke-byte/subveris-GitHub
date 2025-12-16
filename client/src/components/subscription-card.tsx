@@ -22,7 +22,8 @@ import {
 import { UsageLoggerModal } from "@/components/usage-logger-modal";
 import { queryClient } from "@/lib/queryClient";
 import type { Subscription, SubscriptionStatus } from "@shared/schema";
-import { getCategoryIcon, getStatusColor, formatCurrency } from "@/lib/utils";
+import { getCategoryIcon, getStatusColor, formatCurrency, convertAndFormatCurrency } from "@/lib/utils";
+import { useSubscription } from "@/lib/subscription-context";
 
 interface SubscriptionCardProps {
   subscription: Subscription;
@@ -36,6 +37,7 @@ export function SubscriptionCard({
   onDelete,
 }: SubscriptionCardProps) {
   const [usageModalOpen, setUsageModalOpen] = useState(false);
+  const { currency } = useSubscription();
   
   const handleUsageUpdated = () => {
     queryClient.invalidateQueries({ queryKey: ["/api/subscriptions"] });
@@ -141,7 +143,7 @@ export function SubscriptionCard({
         <div className="mt-4 flex items-end justify-between">
           <div>
             <div className="text-2xl font-bold">
-              {formatCurrency(subscription.amount)}
+              {convertAndFormatCurrency(subscription.amount, currency)}
               <span className="text-sm font-normal text-muted-foreground">
                 /{subscription.frequency === "yearly" ? "yr" : subscription.frequency === "monthly" ? "mo" : subscription.frequency === "quarterly" ? "qtr" : "wk"}
               </span>
@@ -170,7 +172,7 @@ export function SubscriptionCard({
                   ? "text-chart-4" 
                   : "text-chart-5"
               }`}>
-                {formatCurrency(costPerUse)}
+                {convertAndFormatCurrency(costPerUse, currency)}
               </span>
               {valueRating === "poor" && (
                 <TrendingDown className="h-3 w-3 text-chart-5" />

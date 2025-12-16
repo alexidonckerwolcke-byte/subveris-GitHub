@@ -477,7 +477,7 @@ export class MemStorage implements IStorage {
       totalMonthlySpend,
       activeSubscriptions,
       potentialSavings,
-      thisMonthSavings: 127.50,
+      thisMonthSavings: potentialSavings,
       unusedSubscriptions,
       averageCostPerUse,
     };

@@ -1,4 +1,5 @@
 import { Link, useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import {
   LayoutDashboard,
   CreditCard,
@@ -21,6 +22,9 @@ import {
   SidebarHeader,
   SidebarFooter,
 } from "@/components/ui/sidebar";
+import type { DashboardMetrics } from "@shared/schema";
+import { useSubscription } from "@/lib/subscription-context";
+import { convertAndFormatCurrency } from "@/lib/utils";
 
 const mainNavItems = [
   {
@@ -65,6 +69,10 @@ const settingsItems = [
 
 export function AppSidebar() {
   const [location] = useLocation();
+  const { currency } = useSubscription();
+  const { data: metrics } = useQuery<DashboardMetrics>({
+    queryKey: ["/api/metrics"],
+  });
 
   return (
     <Sidebar>
@@ -130,7 +138,9 @@ export function AppSidebar() {
           </div>
           <div className="flex flex-col">
             <span className="text-xs font-medium">This Month</span>
-            <span className="text-sm font-semibold text-chart-2">+$127 Saved</span>
+            <span className="text-sm font-semibold text-chart-2">
+              +{convertAndFormatCurrency(metrics?.thisMonthSavings || 0, currency)} Saved
+            </span>
           </div>
         </div>
       </SidebarFooter>

@@ -68,8 +68,13 @@ ALTER TABLE insights ENABLE ROW LEVEL SECURITY;
 ALTER TABLE bank_connections ENABLE ROW LEVEL SECURITY;
 
 -- Create policies to allow all operations (for development - adjust for production)
+DROP POLICY IF EXISTS "Allow all on users" ON users;
 CREATE POLICY "Allow all on users" ON users FOR ALL USING (true);
+DROP POLICY IF EXISTS "Allow all on subscriptions" ON subscriptions;
 CREATE POLICY "Allow all on subscriptions" ON subscriptions FOR ALL USING (true);
+DROP POLICY IF EXISTS "Allow all on transactions" ON transactions;
 CREATE POLICY "Allow all on transactions" ON transactions FOR ALL USING (true);
+DROP POLICY IF EXISTS "Allow all on insights" ON insights;
 CREATE POLICY "Allow all on insights" ON insights FOR ALL USING (true);
+DROP POLICY IF EXISTS "Allow all on bank_connections" ON bank_connections;
 CREATE POLICY "Allow all on bank_connections" ON bank_connections FOR ALL USING (true);

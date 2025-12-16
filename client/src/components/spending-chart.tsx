@@ -15,7 +15,8 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { MonthlySpending, SpendingByCategory } from "@shared/schema";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, convertAndFormatCurrency } from "@/lib/utils";
+import { useSubscription } from "@/lib/subscription-context";
 
 interface SpendingChartProps {
   monthlyData: MonthlySpending[] | undefined;
@@ -32,6 +33,8 @@ const COLORS = [
 ];
 
 export function SpendingChart({ monthlyData, categoryData, isLoading }: SpendingChartProps) {
+  const { currency } = useSubscription();
+
   if (isLoading) {
     return (
       <Card>
@@ -51,7 +54,7 @@ export function SpendingChart({ monthlyData, categoryData, isLoading }: Spending
         <div className="bg-popover border border-popover-border rounded-lg p-3 shadow-lg">
           <p className="text-sm font-medium">{label}</p>
           <p className="text-sm text-chart-1">
-            {formatCurrency(payload[0].value)}
+            {convertAndFormatCurrency(payload[0].value, currency)}
           </p>
         </div>
       );
@@ -67,7 +70,7 @@ export function SpendingChart({ monthlyData, categoryData, isLoading }: Spending
             {payload[0].payload.category.replace("-", " ")}
           </p>
           <p className="text-sm text-muted-foreground">
-            {formatCurrency(payload[0].value)} ({payload[0].payload.percentage.toFixed(1)}%)
+            {convertAndFormatCurrency(payload[0].value, currency)} ({payload[0].payload.percentage.toFixed(1)}%)
           </p>
           <p className="text-xs text-muted-foreground">
             {payload[0].payload.count} subscription{payload[0].payload.count > 1 ? "s" : ""}

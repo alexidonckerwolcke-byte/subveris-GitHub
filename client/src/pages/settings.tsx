@@ -17,6 +17,39 @@ import {
 } from "lucide-react";
 import { useState, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useSubscription, type Currency } from "@/lib/subscription-context";
+
+const CURRENCIES: { value: Currency; label: string; symbol: string }[] = [
+  { value: "USD", label: "US Dollar", symbol: "$" },
+  { value: "EUR", label: "Euro", symbol: "€" },
+  { value: "GBP", label: "British Pound", symbol: "£" },
+  { value: "JPY", label: "Japanese Yen", symbol: "¥" },
+  { value: "CAD", label: "Canadian Dollar", symbol: "C$" },
+  { value: "AUD", label: "Australian Dollar", symbol: "A$" },
+  { value: "CHF", label: "Swiss Franc", symbol: "CHF" },
+  { value: "CNY", label: "Chinese Yuan", symbol: "¥" },
+];
+
+function CurrencySelector() {
+  const { currency, setCurrency } = useSubscription();
+  
+  return (
+    <div className="w-32 p-2 border rounded bg-blue-100">
+      <div className="text-xs text-blue-600 mb-1">Currency Selector:</div>
+      <select 
+        value={currency} 
+        onChange={(e) => setCurrency(e.target.value as Currency)}
+        className="w-full bg-transparent"
+      >
+        {CURRENCIES.map((curr) => (
+          <option key={curr.value} value={curr.value}>
+            {curr.symbol} {curr.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
 
 export default function Settings() {
   const { toast } = useToast();
@@ -119,6 +152,17 @@ export default function Settings() {
                 </p>
               </div>
               <ThemeToggle />
+            </div>
+            <Separator className="my-4" />
+            <div className="text-lg font-bold text-red-500 mb-2">CURRENCY SETTINGS BELOW:</div>
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label>Currency</Label>
+                <p className="text-sm text-muted-foreground">
+                  Display currency for amounts
+                </p>
+              </div>
+              <CurrencySelector />
             </div>
           </CardContent>
         </Card>

@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import type { Subscription } from "@shared/schema";
+import { convertAndFormatCurrency } from "@/lib/utils";
+import { useSubscription } from "@/lib/subscription-context";
 
 interface UsageLoggerModalProps {
   subscription: Subscription;
@@ -27,6 +29,7 @@ export function UsageLoggerModal({
   onUsageUpdated,
 }: UsageLoggerModalProps) {
   const { toast } = useToast();
+  const { currency } = useSubscription();
   const [usageCount, setUsageCount] = useState(subscription.usageCount.toString());
   const [isLoading, setIsLoading] = useState(false);
 
@@ -128,7 +131,7 @@ export function UsageLoggerModal({
               data-testid="input-usage-count"
             />
             <p className="text-xs text-muted-foreground">
-              Cost per use: ${subscription.usageCount > 0 ? (subscription.amount / subscription.usageCount).toFixed(2) : "N/A"}
+              Cost per use: {subscription.usageCount > 0 ? convertAndFormatCurrency(subscription.amount / subscription.usageCount, currency) : "N/A"}
             </p>
           </div>
         </div>

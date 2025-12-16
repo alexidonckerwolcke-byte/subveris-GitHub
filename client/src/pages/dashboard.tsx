@@ -139,7 +139,15 @@ export default function Dashboard() {
               isLoading={metricsLoading}
             />
           ) : (
-            <PremiumGate feature="Savings Projections" showBlurred={false} />
+            <PremiumGate feature="Savings Projections" showBlurred={false}>
+              <SavingsProjection
+                potentialSavings={metrics?.potentialSavings ?? 0}
+                currentSavings={metrics?.thisMonthSavings ?? 0}
+                unusedCount={metrics?.unusedSubscriptions ?? 0}
+                toCancelCount={0}
+                isLoading={metricsLoading}
+              />
+            </PremiumGate>
           )}
         </div>
 
@@ -147,12 +155,16 @@ export default function Dashboard() {
           {limits.hasCostPerUse ? (
             <CostPerUse analyses={costAnalysis} isLoading={analysisLoading} />
           ) : (
-            <PremiumGate feature="Cost-per-use analytics" showBlurred={false} />
+            <PremiumGate feature="Cost-per-use analytics" showBlurred={false}>
+              <CostPerUse analyses={costAnalysis} isLoading={analysisLoading} />
+            </PremiumGate>
           )}
           {limits.hasBehavioralInsights ? (
             <BehavioralInsights insights={behavioralInsights} isLoading={insightsLoading} />
           ) : (
-            <PremiumGate feature="Behavioral insights" showBlurred={false} />
+            <PremiumGate feature="Behavioral insights" showBlurred={false}>
+              <BehavioralInsights insights={insights} isLoading={insightsLoading} />
+            </PremiumGate>
           )}
         </div>
 
@@ -164,7 +176,14 @@ export default function Dashboard() {
             isRefreshing={recsLoading}
           />
         ) : (
-          <PremiumGate feature="AI-powered recommendations" showBlurred={false} />
+          <PremiumGate feature="AI-powered recommendations" showBlurred={false}>
+            <AIRecommendations
+              recommendations={recommendations}
+              isLoading={recsLoading}
+              onRefresh={handleRefreshRecommendations}
+              isRefreshing={recsLoading}
+            />
+          </PremiumGate>
         )}
 
         <div>

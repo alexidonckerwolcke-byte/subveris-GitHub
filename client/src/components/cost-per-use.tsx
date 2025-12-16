@@ -4,7 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 import type { CostPerUseAnalysis } from "@shared/schema";
-import { formatCurrency, getValueRatingColor } from "@/lib/utils";
+import { formatCurrency, getValueRatingColor, convertAndFormatCurrency } from "@/lib/utils";
+import { useSubscription } from "@/lib/subscription-context";
 
 interface CostPerUseProps {
   analyses: CostPerUseAnalysis[] | undefined;
@@ -12,6 +13,8 @@ interface CostPerUseProps {
 }
 
 export function CostPerUse({ analyses, isLoading }: CostPerUseProps) {
+  const { currency } = useSubscription();
+
   if (isLoading) {
     return (
       <Card>
@@ -85,7 +88,7 @@ export function CostPerUse({ analyses, isLoading }: CostPerUseProps) {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className={`font-semibold ${getValueRatingColor(analysis.valueRating)}`}>
-                      {formatCurrency(analysis.costPerUse)}
+                      {convertAndFormatCurrency(analysis.costPerUse, currency)}
                     </span>
                     <span className="text-xs text-muted-foreground">/use</span>
                     {analysis.valueRating === "excellent" || analysis.valueRating === "good" ? (
@@ -105,7 +108,7 @@ export function CostPerUse({ analyses, isLoading }: CostPerUseProps) {
                 </div>
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>
-                    {formatCurrency(analysis.monthlyAmount)}/mo
+                    {convertAndFormatCurrency(analysis.monthlyAmount, currency)}/mo
                   </span>
                   <span>
                     {analysis.usageCount} uses this month

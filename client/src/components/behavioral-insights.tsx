@@ -2,7 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Coffee, Film, Utensils, Music, Tv, Plane, ShoppingBag, Fuel } from "lucide-react";
 import type { OpportunityCost } from "@shared/schema";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, convertAndFormatCurrency } from "@/lib/utils";
+import { useSubscription } from "@/lib/subscription-context";
 
 interface BehavioralInsightsProps {
   insights: OpportunityCost[] | undefined;
@@ -21,6 +22,8 @@ const iconMap: Record<string, typeof Coffee> = {
 };
 
 export function BehavioralInsights({ insights, isLoading }: BehavioralInsightsProps) {
+  const { currency } = useSubscription();
+
   if (isLoading) {
     return (
       <Card>
@@ -64,7 +67,7 @@ export function BehavioralInsights({ insights, isLoading }: BehavioralInsightsPr
               <div className="flex items-center justify-between mb-3">
                 <span className="font-medium">{insight.subscriptionName}</span>
                 <span className="text-sm font-semibold text-chart-5">
-                  {formatCurrency(insight.monthlyAmount)}/mo
+                  {convertAndFormatCurrency(insight.monthlyAmount, currency)}/mo
                 </span>
               </div>
               <p className="text-sm text-muted-foreground mb-3">

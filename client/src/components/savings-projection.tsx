@@ -11,7 +11,8 @@ import {
   Check,
   ArrowRight,
 } from "lucide-react";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, convertAndFormatCurrency } from "@/lib/utils";
+import { useSubscription } from "@/lib/subscription-context";
 
 interface SavingsProjectionProps {
   potentialSavings: number;
@@ -28,6 +29,7 @@ export function SavingsProjection({
   toCancelCount,
   isLoading,
 }: SavingsProjectionProps) {
+  const { currency } = useSubscription();
   const [, navigate] = useLocation();
   if (isLoading) {
     return (
@@ -70,7 +72,7 @@ export function SavingsProjection({
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">Monthly Potential</span>
               <span className="text-2xl font-bold text-chart-2">
-                {formatCurrency(potentialSavings)}
+                {convertAndFormatCurrency(potentialSavings, currency)}
               </span>
             </div>
             <div className="space-y-2">
@@ -85,8 +87,8 @@ export function SavingsProjection({
                 />
               </div>
               <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span>Saved: {formatCurrency(currentSavings)}</span>
-                <span>Goal: {formatCurrency(potentialSavings)}</span>
+                <span>Saved: {convertAndFormatCurrency(currentSavings, currency)}</span>
+                <span>Goal: {convertAndFormatCurrency(potentialSavings, currency)}</span>
               </div>
             </div>
           </div>
@@ -98,7 +100,7 @@ export function SavingsProjection({
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Yearly Projection</p>
-                <p className="font-semibold">{formatCurrency(projectedYearlySavings)}</p>
+                <p className="font-semibold">{convertAndFormatCurrency(projectedYearlySavings, currency)}</p>
               </div>
             </div>
             <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">

@@ -2,6 +2,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { TrendingDown, TrendingUp, CreditCard, AlertTriangle, PiggyBank, DollarSign } from "lucide-react";
 import type { DashboardMetrics } from "@shared/schema";
 import { Skeleton } from "@/components/ui/skeleton";
+import { convertAndFormatCurrency } from "@/lib/utils";
+import { useSubscription } from "@/lib/subscription-context";
 
 interface MetricsCardsProps {
   metrics: DashboardMetrics | undefined;
@@ -9,6 +11,8 @@ interface MetricsCardsProps {
 }
 
 export function MetricsCards({ metrics, isLoading }: MetricsCardsProps) {
+  const { currency } = useSubscription();
+
   if (isLoading) {
     return (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -28,7 +32,7 @@ export function MetricsCards({ metrics, isLoading }: MetricsCardsProps) {
   const cards = [
     {
       title: "Total Monthly Spend",
-      value: `$${metrics?.totalMonthlySpend?.toFixed(2) ?? "0.00"}`,
+      value: convertAndFormatCurrency(metrics?.totalMonthlySpend ?? 0, currency),
       change: "-12%",
       changeType: "decrease" as const,
       icon: DollarSign,
@@ -46,7 +50,7 @@ export function MetricsCards({ metrics, isLoading }: MetricsCardsProps) {
     },
     {
       title: "Potential Savings",
-      value: `$${metrics?.potentialSavings?.toFixed(2) ?? "0.00"}`,
+      value: convertAndFormatCurrency(metrics?.potentialSavings ?? 0, currency),
       change: "per month",
       changeType: "highlight" as const,
       icon: PiggyBank,

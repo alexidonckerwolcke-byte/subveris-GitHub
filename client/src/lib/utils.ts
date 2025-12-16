@@ -13,6 +13,7 @@ import {
   Code,
 } from "lucide-react";
 import type { SubscriptionCategory, SubscriptionStatus } from "@shared/schema";
+import { EXCHANGE_RATES, type Currency } from "./subscription-context";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -50,6 +51,12 @@ export function formatCurrency(amount: number, currency: string = "USD"): string
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(amount);
+}
+
+export function convertAndFormatCurrency(amount: number, selectedCurrency: Currency): string {
+  // Assume amount is in USD, convert to selected currency
+  const convertedAmount = amount / EXCHANGE_RATES[selectedCurrency];
+  return formatCurrency(convertedAmount, selectedCurrency);
 }
 
 export function formatDate(date: string | Date): string {

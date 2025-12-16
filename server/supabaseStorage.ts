@@ -422,7 +422,7 @@ export class SupabaseStorage implements IStorage {
       totalMonthlySpend,
       activeSubscriptions,
       potentialSavings,
-      thisMonthSavings: 127.50,
+      thisMonthSavings: potentialSavings,
       unusedSubscriptions,
       averageCostPerUse,
     };
